@@ -1,5 +1,3 @@
-import os
-
 import gc
 
 from Config import *
