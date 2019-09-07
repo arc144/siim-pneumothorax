@@ -50,13 +50,18 @@ assert len(weights) == len(fns)
 handles = [ZipFile(fn) for fn in fns]
 
 image_ids, rles = [], []
-pngs = ZipFile(fns[0]).namelist()
+pngs = [x.split('.')[0] for x in ZipFile(fns[0]).namelist()]
 predictions = np.zeros((len(pngs), 1024, 1024), dtype=np.float16)
 for i, png in enumerate(tqdm(pngs)):
     image_id = os.path.splitext(png)[0]
     p_ensemble = 0.0
-    for handle, w in zip(handles, weights):
-        with handle.open(png) as f:
+    for j, (handle, w) in enumerate(zip(handles, weights)):
+        # This is a fix to a minor bug that adds ".png" to saved predictions
+        if j < 10:
+            ext = '.dcm.png'
+        else:
+            ext = '.png'
+        with handle.open(png + ext) as f:
             img = cv2.imdecode(np.frombuffer(f.read(), 'uint8'), 0)
             p = np.float32(img) / 255
             p_ensemble += p * w / np.sum(weights)
