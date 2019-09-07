@@ -2,7 +2,7 @@ import Utils.TTA as TTA
 import Utils.augmentations as Aug
 from Core import losses
 from Models.models import *
-from .UNet import Config
+from .BaseConfig import Config
 
 
 class AttributeDict(dict):
@@ -62,15 +62,11 @@ class EMANetResNet101_768_Fold7(Config):
         ),
         remove_bg_only=False,
         shuffle=True,
-        use_nih=False,
         epoch_per_val=1,
-        cls_csv_path='/media/nvme/Datasets/Pneumothorax/CheXpert-v1.0-small/train_val_prepared.csv',
-        csv_path='./Data/Folds/fold{}.csv',
         val_mode='max',
     )
 
     test = AttributeDict(
-        csv_path='./Data/testset.csv',
         # Path to save .csv and features. Features are saved "out_path/features/"
         out_path='./Output',
         # Save gallery features to disk every X batches

@@ -206,11 +206,11 @@ class DatasetFactory():
 
 if __name__ == '__main__':
     import matplotlib.pyplot as plt
-    from Config import UNet
+    from Config import BaseConfig
     import os
 
     os.chdir('../')
-    cfg = UNet.Config()
+    cfg = BaseConfig.Config()
     dataset = DatasetFactory('/media/hdd/Kaggle/Pneumothorax/Data/Folds/fold0.csv', cfg)
     dataloader = dataset.yield_loader(is_test=True)
     for index, meta, im, mask in dataloader:

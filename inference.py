@@ -5,7 +5,6 @@ from Core.dataset import DatasetFactory
 from Core.tasks import Segmentation
 
 save_path = './Data/Preds'
-stage2_test_path = './Data/testset_stage2.csv'
 ##############################################################################################
 
 configs = [
@@ -27,8 +26,7 @@ for cfg in configs:
 
 for j, cfg in enumerate(configs):
     dataset = DatasetFactory(
-        # cfg.test.csv_path,
-        stage2_test_path,
+        cfg.test.csv_path,
         cfg)
     test_loader = dataset.yield_loader(is_test=True)
     net = cfg.model.architecture(pretrained=cfg.model.pretrained)
