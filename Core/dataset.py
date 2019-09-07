@@ -21,8 +21,6 @@ class PneumoDataset(Dataset):
 
     def __init__(self, df, is_train=False, transform=None, tgt_size=None):
         self.df = df.set_index('ImageId')
-        # self.df['Path'] = '/media/nvme/Datasets/Pneumothorax/lafoss/train/' + self.df.index + '.png'
-        # self.df['Mask'] = '/media/nvme/Datasets/Pneumothorax/lafoss/mask/' + self.df.index + '.png'
 
         if is_train:
             if 'EncodedPixels' in self.df.columns:
@@ -49,26 +47,6 @@ class PneumoDataset(Dataset):
             mask = mask.get_arr_int() * 255
 
         return im, mask
-
-    # def load_image_gt(self, index):
-    #     '''Load image and gt from a subset dataframe'''
-    #     image_id = self.ids[index]
-    #     meta = None
-    #     mask_ins = None
-    #
-    #     path = self.df.loc[image_id, 'Path']
-    #     maskp = self.df.loc[image_id, 'Mask']
-    #
-    #     try:
-    #         image = cv2.imread(path if isinstance(path, str) else path.values[0])
-    #         mask = cv2.imread(maskp if isinstance(maskp, str) else maskp.values[0])
-    #     except:
-    #         print('oba')
-    #     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    #     if mask is not None:
-    #         mask = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
-    #
-    #     return image_id, meta, image, mask, mask_ins
 
     def load_image_gt(self, index):
         '''Load image and gt from a subset dataframe'''

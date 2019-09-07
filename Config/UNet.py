@@ -2,12 +2,9 @@ import os
 
 import imgaug as ia
 import numpy as np
-import torch
 
 import Utils.TTA as TTA
 import Utils.augmentations as Aug
-import Backbone as B
-from Core import losses
 from Models.models import *
 
 
@@ -25,7 +22,6 @@ class Config(object):
         architecture=PANetDilatedResNet34,
         pretrained=True,
         weights=None,
-        # weights='/media/hdd/Kaggle/Pneumothorax/Saves/PANetDenseNet121/chestXpert.pth',
     )
 
     image = AttributeDict(
@@ -36,13 +32,7 @@ class Config(object):
         workers=12,
     )
 
-    # loss = losses.DiceLoss(mirror=False)
-    # loss = losses.CrossEntrpy()
     loss = nn.BCEWithLogitsLoss(reduction='none')
-    # loss = losses.Lovasz_Hinge()
-    # loss = losses.WeightedBCE()
-    # loss = losses.BCE_Lovasz(alpha=0.002)
-    # loss = losses.OhemBCE()
 
     optim = AttributeDict(
         type='Adam',
@@ -56,7 +46,7 @@ class Config(object):
             lr=1e-3 / 2,
             lr_min=1e-3 / 200,
             n_epoch=0,
-            scheduler='OneCycleLR', #'CosineAnneling',
+            scheduler='OneCycleLR',
             tmax=10,
             tmul=1,
             grad_acc=2,
@@ -67,7 +57,7 @@ class Config(object):
             lr=1e-3 / 4,
             lr_min=1e-3 / 200,
             n_epoch=30,
-            scheduler='CosineAnneling',  # 'OneCycleLR',
+            scheduler='CosineAnneling',
             tmax=31,
             tmul=1,
             grad_acc=2,
@@ -88,11 +78,10 @@ class Config(object):
         out_path='/media/hdd/Kaggle/Pneumothorax/Output',
         # Save gallery features to disk every X batches
         TTA=[TTA.Nothing(mode='sigmoid')],
-        # TTA=[TTA.Nothing(), TTA.ScaleTTA(scale=np.sqrt(2)), TTA.ScaleTTA(scale=1 / np.sqrt(2))],  # TTA.VFlip(),
     )
 
     def __init__(self):
-        self.train.csv_path='/media/hdd/Kaggle/Pneumothorax/Data/Folds/fold{}.csv'.format(self.fold)
+        self.train.csv_path = '/media/hdd/Kaggle/Pneumothorax/Data/Folds/fold{}.csv'.format(self.fold)
 
         if self.train.use_nih:
             self.train.csv_path = self.train.csv_path.replace('.csv', '_nih.csv')
