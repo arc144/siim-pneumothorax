@@ -5,6 +5,7 @@ from Core.dataset import DatasetFactory
 from Core.tasks import Segmentation
 
 save_path = './Data/Preds'
+stage2_test_path = './Data/testset_stage2.csv'
 ##############################################################################################
 
 configs = [
@@ -26,7 +27,8 @@ for cfg in configs:
 
 for j, cfg in enumerate(configs):
     dataset = DatasetFactory(
-        cfg.test.csv_path,
+        # cfg.test.csv_path,
+        stage2_test_path,
         cfg)
     test_loader = dataset.yield_loader(is_test=True)
     net = cfg.model.architecture(pretrained=cfg.model.pretrained)
@@ -43,19 +45,13 @@ for j, cfg in enumerate(configs):
     if not os.path.exists(pred_path):
         os.mkdir(pred_path)
 
-    if not j:
-        index_vec, meta_vec, mean_pred, _ = trainer.predict(test_loader,
-                                                            cfg.test.TTA,
-                                                            pbar=True,
-                                                            raw=True,
-                                                            pred_zip=os.path.join(pred_path, 'pred_tta.zip'),
-                                                            tgt_size=1024)
-    else:
-        mean_pred = (j * mean_pred + trainer.predict(test_loader,
-                                                     cfg.test.TTA,
-                                                     pbar=True,
-                                                     raw=True,
-                                                     pred_zip=os.path.join(pred_path, 'pred_tta.zip'),
-                                                     tgt_size=1024)[2]) / (j + 1)
+    index_vec, meta_vec, mean_pred, _ = trainer.predict(test_loader,
+                                                        cfg.test.TTA,
+                                                        pbar=True,
+                                                        raw=True,
+                                                        pred_zip=os.path.join(pred_path, 'pred_tta.zip'),
+                                                        tgt_size=1024)
+
+    del mean_pred, meta_vec, index_vec
     gc.collect()
 
