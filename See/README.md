@@ -29,12 +29,4 @@ $ python train.py
 
 This will produce the weights `Model_00*_f0*/*.pth` and test predictions `Model_00*_f0*/f0*-PREDS.zip`.
 
-# Ensemble
-
-```console
-$ python ensemble_all.py
-```
-
-
-
 
