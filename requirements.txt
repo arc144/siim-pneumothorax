@@ -83,7 +83,7 @@ lief==0.9.0
 lightgbm==2.2.3
 llvmlite==0.28.0
 locket==0.2.0
-lxml==4.3.2
+lxml==4.9.1
 MarkupSafe==1.1.1
 mathparse==0.1.2
 matplotlib==3.0.3
